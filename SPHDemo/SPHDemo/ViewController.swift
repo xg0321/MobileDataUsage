@@ -48,7 +48,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         configYearDataModelArray()
         HttpHelper.shared.get(url) { (errorInfo, json) in
             if let json = json {
-                print(json["result"]["records"])
+                print(json)
                 let jsonArray = json["result"]["records"].arrayValue
                 for json in jsonArray {
                     let model = QuarterDataModel(from: json)
@@ -57,15 +57,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                     }
                 }
                 self.processModelArray()
-                self.tableView.reloadData()
-                self.tableView.isHidden = false
-                self.loadingView.isHidden = true
-                self.emptyDataView.isHidden = true
+                self.hideEmptyDataView()
             } else {
                 print(errorInfo)
-                self.tableView.isHidden = true
-                self.loadingView.isHidden = false
-                self.emptyDataView.isHidden = false
+                if let modelArray = self.loadCache() {
+                    print("读取缓存")
+                    self.yearDataModelArray = modelArray
+                    self.hideEmptyDataView()
+                } else {
+                    print("没有缓存")
+                    self.showEmptyDataView()
+                }
             }
         }
 //        Alamofire.request(url).responseJSON { response in
@@ -77,6 +79,19 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 //                print(error)
 //            }
 //        }
+    }
+    
+    func showEmptyDataView() {
+        self.tableView.isHidden = true
+        self.loadingView.isHidden = false
+        self.emptyDataView.isHidden = false
+    }
+    
+    func hideEmptyDataView() {
+        self.tableView.reloadData()
+        self.tableView.isHidden = false
+        self.loadingView.isHidden = true
+        self.emptyDataView.isHidden = true
     }
     
     func processModelArray() {
@@ -102,9 +117,26 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             }
         }
         
-        for model in yearDataModelArray {
-            print(model.year, model.volumeOfMobileData, model.decreasedQuarterArray)
+        saveCache()
+        
+//        for model in yearDataModelArray {
+//            print(model.year, model.volumeOfMobileData, model.decreasedQuarterArray)
+//        }
+    }
+    
+    func saveCache() {
+        if let data = try? PropertyListEncoder().encode(yearDataModelArray) {
+            UserDefaults.standard.set(data, forKey: "data")
+            UserDefaults.standard.synchronize()
         }
+    }
+    
+    func loadCache() -> [YearDataModel]? {
+        if let data = UserDefaults.standard.data(forKey: "data") {
+            let modelArray = try? PropertyListDecoder().decode([YearDataModel].self, from: data)
+            return modelArray
+        }
+        return nil
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -124,11 +156,11 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 20
+        return 10
     }
 
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 0.001
+        return 10
     }
 }
 

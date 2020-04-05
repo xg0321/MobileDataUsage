@@ -8,7 +8,7 @@
 
 import Foundation
 
-class YearDataModel {
+class YearDataModel: Codable {
     var year = 0
     var volumeOfMobileData: Double = 0
     var decreasedQuarterArray: [Int] = []
