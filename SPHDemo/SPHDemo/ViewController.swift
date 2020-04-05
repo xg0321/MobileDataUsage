@@ -80,15 +80,18 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func processModelArray() {
+        // 按季度排序
         quarterDataModelArray = quarterDataModelArray.sorted {
             $0.quarterInt < $1.quarterInt
         }
         
         for i in 0..<quarterDataModelArray.count {
+            // 计算年度使用量
             let quarterDataModel = quarterDataModelArray[i]
             let yearInt = quarterDataModel.quarterInt / 10
             yearDataModelArray[yearInt - 2008].volumeOfMobileData += quarterDataModel.volumeOfMobileData
             
+            // 找出使用量下降的季度
             if i < quarterDataModelArray.count - 1 {
                 let nextQuarterDataModel = quarterDataModelArray[i + 1]
                 if nextQuarterDataModel.volumeOfMobileData < quarterDataModel.volumeOfMobileData {
