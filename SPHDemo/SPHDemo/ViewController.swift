@@ -18,16 +18,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     var quarterDataModelArray = [QuarterDataModel]()
     var yearDataModelArray = [YearDataModel]()
     let url = "https://data.gov.sg/api/action/datastore_search?resource_id=a807b7ab-6cad-4aa6-87d0-e283a7353a0f"
-
+    
+    // MARK: - 生命周期
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
         
         tableView.delegate = self
         tableView.dataSource = self
         loadData()
     }
     
+    // MARK: - 点击事件
     @IBAction func refreshButtonTapped(_ sender: UIButton) {
         quarterDataModelArray.removeAll()
         yearDataModelArray.removeAll()
@@ -35,6 +36,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         loadData()
     }
     
+    // MARK: - 自定义方法
     func configYearDataModelArray() {
         for i in 0..<2018 - 2008 + 1 {
             let model = YearDataModel()
@@ -70,15 +72,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 }
             }
         }
-//        Alamofire.request(url).responseJSON { response in
-//            switch response.result {
-//            case .success(let value):
-//                let json = JSON(value)
-//                print("JSON: \(json)")
-//            case .failure(let error):
-//                print(error)
-//            }
-//        }
     }
     
     func showEmptyDataView() {
@@ -139,6 +132,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return nil
     }
     
+    // MARK: - UITableView代理
     func numberOfSections(in tableView: UITableView) -> Int {
         return yearDataModelArray.count
     }

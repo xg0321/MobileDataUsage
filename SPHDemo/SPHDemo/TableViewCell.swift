@@ -67,9 +67,10 @@ class TableViewCell: UITableViewCell {
         
         var nextResponder = self.next
         while nextResponder != nil {
-            if nextResponder is UIViewController {
-                let vc = nextResponder as! UIViewController
+            if nextResponder is ViewController {
+                let vc = nextResponder as! ViewController
                 vc.present(alert, animated: true, completion: nil)
+                break
             }
             nextResponder = nextResponder!.next
         }

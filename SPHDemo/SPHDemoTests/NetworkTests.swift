@@ -33,7 +33,7 @@ class NetworkTests: XCTestCase {
     }
     
     func testRequestFailure() {
-        let url = "https://data.gov.sg/api/action/datastore_search"
+        let url = ""
         let expectation = self.expectation(description: "请求失败")
         HttpHelper.shared.get(url) { (errorInfo, json) in
             if json != nil {
