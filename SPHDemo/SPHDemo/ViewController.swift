@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import OHHTTPStubs
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBOutlet weak var tableView: UITableView!

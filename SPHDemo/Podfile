@@ -4,4 +4,11 @@ use_frameworks!
 
 target 'SPHDemo' do
     pod 'Alamofire', '~> 4.9'
+    pod 'OHHTTPStubs', '~> 8.0'
+    pod 'OHHTTPStubs/Swift', '~> 8.0'
+end
+
+target 'SPHDemoTests' do
+    pod 'OHHTTPStubs', '~> 8.0'
+    pod 'OHHTTPStubs/Swift', '~> 8.0'
 end
